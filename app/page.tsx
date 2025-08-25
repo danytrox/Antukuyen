@@ -436,7 +436,7 @@ export default function TurismoAncestralPage() {
             </div>
           </div>
           <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Antukuyen Nativa - Claudia Antillanca Manque. Todos los derechos reservados.</p>
+            <p>&copy; 2025 Antukuyen Nativa - Claudia Antillanca Manque. Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>
