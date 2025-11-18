@@ -4,14 +4,74 @@ import { Badge } from "@/components/ui/badge"
 import { MapPin, Leaf, Mountain, Users, Heart, Phone, Mail, Facebook, Instagram, Youtube } from "lucide-react"
 
 export default function TurismoAncestralPage() {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": ["TouristAttraction", "LodgingBusiness"],
+    name: "Antukuyen Nativa",
+    description:
+      "Domos ecológicos y experiencias culturales mapuche huilliche en la mística Isla Huapi, Lago Ranco. Turismo ancestral con talleres de mapudungun, teñido de lana y relatos tradicionales.",
+    image: [
+      "https://antukuyen.cl/domos-arriba.avif",
+      "https://antukuyen.cl/bcadf52e-2dfb-482f-9fee-b3b3d9855c4a.avif",
+    ],
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Isla Huapi S/n°",
+      addressLocality: "Futrono",
+      addressRegion: "Región de Los Ríos",
+      addressCountry: "CL",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: "-40.1333",
+      longitude: "-72.4000",
+    },
+    telephone: "+56974543737",
+    email: "c.antillancam@gmail.com",
+    url: "https://antukuyen.cl",
+    priceRange: "$$",
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      opens: "00:00",
+      closes: "23:59",
+    },
+    owner: {
+      "@type": "Person",
+      name: "Claudia Antillanca Manque",
+      jobTitle: "Emprendedora Mapuche Huilliche",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.8",
+      reviewCount: "25",
+    },
+    sameAs: [
+      "https://www.facebook.com/domosantukuyen",
+      "https://www.instagram.com/cabanas_domo_antukuyen/",
+      "https://www.airbnb.cl/rooms/16665460",
+    ],
+    offers: {
+      "@type": "Offer",
+      url: "https://www.airbnb.cl/rooms/16665460",
+      priceCurrency: "CLP",
+      availability: "https://schema.org/InStock",
+    },
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       {/* Hero Section - Portada Inmersiva */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url('/amanecer-montanas-sagradas.png')`,
+            backgroundImage: `url('/bcadf52e-2dfb-482f-9fee-b3b3d9855c4a.avif')`,
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
@@ -26,8 +86,11 @@ export default function TurismoAncestralPage() {
           <Button
             size="lg"
             className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg font-semibold transition-all duration-300 transform hover:scale-105"
+            asChild
           >
-            Reserva tu experiencia
+            <a href="https://wa.link/8nh1kp" target="_blank" rel="noopener noreferrer">
+              Reserva tu experiencia
+            </a>
           </Button>
         </div>
 
@@ -191,8 +254,8 @@ export default function TurismoAncestralPage() {
 
             <div className="relative">
               <img
-                src="/mystical-ancestral-map.png"
-                alt="Vista de los Domos Antukuyen"
+                src="/domos-arriba.avif"
+                alt="Domos Antukuyen ecológicos en Isla Huapi con vista panorámica al Lago Ranco y la cordillera, turismo ancestral mapuche huilliche"
                 className="w-full h-auto rounded-2xl shadow-2xl"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl" />
@@ -239,7 +302,7 @@ export default function TurismoAncestralPage() {
                 <div className="relative h-64 overflow-hidden">
                   <img
                     src={experience.image || "/placeholder.svg"}
-                    alt={experience.title}
+                    alt={`${experience.title} - ${experience.description} en Antukuyen Nativa, Isla Huapi`}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
@@ -298,7 +361,7 @@ export default function TurismoAncestralPage() {
               </div>
               <h3 className="font-semibold text-lg mb-2">WhatsApp</h3>
               <p className="text-gray-600">+56 9 7454 3737</p>
-              <Button className="mt-4 bg-green-600 hover:bg-green-700">
+              <Button className="mt-4 bg-green-600 hover:bg-green-700" asChild>
                 <a href="https://wa.link/8nh1kp" target="_blank" rel="noopener noreferrer">
                   Contactar
                 </a>
@@ -359,6 +422,7 @@ export default function TurismoAncestralPage() {
             <Button
               size="lg"
               className="bg-white text-green-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold transition-all duration-300 transform hover:scale-105"
+              asChild
             >
               <a href="https://wa.link/8nh1kp" target="_blank" rel="noopener noreferrer">
                 Reserva por WhatsApp
@@ -368,8 +432,15 @@ export default function TurismoAncestralPage() {
               size="lg"
               variant="outline"
               className="border-white text-white hover:bg-white hover:text-green-600 px-8 py-4 text-lg font-semibold transition-all duration-300 bg-transparent"
+              asChild
             >
-              Ver Alojamiento
+              <a
+                href="https://www.airbnb.cl/rooms/16665460?source_impression_id=p3_1762987017_P32SfMac-9eBagLx"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ver Alojamiento
+              </a>
             </Button>
           </div>
         </div>
@@ -440,6 +511,7 @@ export default function TurismoAncestralPage() {
           </div>
         </div>
       </footer>
-    </div>
+      </div>
+    </>
   )
 }
