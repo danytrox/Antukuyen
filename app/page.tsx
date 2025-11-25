@@ -1,12 +1,13 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import { Dialog, DialogContent, DialogPortal, DialogOverlay } from "@/components/ui/dialog"
-import { MapPin, Leaf, Mountain, Users, Heart, Phone, Mail, Facebook, Instagram, Youtube, Ship, X } from "lucide-react"
+import { Leaf, Mountain, Heart, Ship, X, MessageCircle, Share2, Facebook, Instagram, Menu, Home, Users as UsersIcon, Sparkles, Phone } from "lucide-react"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import Autoplay from "embla-carousel-autoplay"
 
 export default function TurismoAncestralPage() {
@@ -68,34 +69,29 @@ export default function TurismoAncestralPage() {
 
   // Estados para lightbox y animaciones
   const [selectedImage, setSelectedImage] = useState<{ src: string; alt: string } | null>(null)
-  const [visibleCards, setVisibleCards] = useState<number[]>([])
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([])
+  
+  // Estado para el splash screen
+  const [showSplash, setShowSplash] = useState(false)
+  
+  // Estado para el menú de contacto flotante
+  const [showContactMenu, setShowContactMenu] = useState(false)
+  
+  // Estado para el menú hamburguesa móvil
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  // Intersection Observer para animaciones de cards
+  // Efecto para controlar el splash (solo se muestra una vez por sesión)
   useEffect(() => {
-    const observers: IntersectionObserver[] = []
+    const splashShown = sessionStorage.getItem('splashShown')
+    
+    if (!splashShown) {
+      setShowSplash(true)
+      
+      const timer = setTimeout(() => {
+        setShowSplash(false)
+        sessionStorage.setItem('splashShown', 'true')
+      }, 4000)
 
-    cardRefs.current.forEach((ref, index) => {
-      if (ref) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                setTimeout(() => {
-                  setVisibleCards((prev) => [...prev, index])
-                }, index * 200) // Delay progresivo para cada card
-              }
-            })
-          },
-          { threshold: 0.1 }
-        )
-        observer.observe(ref)
-        observers.push(observer)
-      }
-    })
-
-    return () => {
-      observers.forEach((observer) => observer.disconnect())
+      return () => clearTimeout(timer)
     }
   }, [])
   return (
@@ -104,99 +100,265 @@ export default function TurismoAncestralPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      {/* Hero Section - Portada Inmersiva */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url('/bcadf52e-2dfb-482f-9fee-b3b3d9855c4a.avif')`,
+      
+      {/* Splash Screen */}
+      {showSplash && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-black cursor-pointer"
+          onClick={() => {
+            setShowSplash(false)
+            sessionStorage.setItem('splashShown', 'true')
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
-        </div>
-
-        <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
-          <h1 className="font-serif font-black text-5xl md:text-7xl mb-6 leading-tight">Antukuyen Nativa</h1>
-          <p className="text-xl md:text-2xl mb-4 font-light leading-relaxed">Sol y Luna en idioma mapuzungun</p>
-          <p className="text-lg md:text-xl mb-8 font-light leading-relaxed">
-            Desconexión total de la ciudad y conexión profunda con la naturaleza en la ancestral Isla Huapi
-          </p>
-          <Button
-            size="lg"
-            className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg font-semibold transition-all duration-300 transform hover:scale-105"
-            asChild
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-in zoom-in-105 fade-in-0 duration-1000"
+            style={{
+              backgroundImage: `url('/bcadf52e-2dfb-482f-9fee-b3b3d9855c4a.avif')`,
+            }}
           >
-            <a href="https://wa.link/8nh1kp" target="_blank" rel="noopener noreferrer">
-              Reserva tu experiencia
-            </a>
-          </Button>
-        </div>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
+          </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white/70 rounded-full mt-2 animate-pulse" />
+          <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6 animate-in slide-in-from-bottom-8 fade-in-0 duration-1000 delay-300">
+            <h1 className="font-serif font-black text-6xl md:text-8xl mb-8 leading-tight drop-shadow-2xl">
+              Antukuyen Nativa
+            </h1>
+            <p className="text-2xl md:text-3xl mb-6 font-light leading-relaxed drop-shadow-xl">
+              Sol y Luna en idioma mapuzungun
+            </p>
+            <p className="text-xl md:text-2xl mb-12 font-light leading-relaxed drop-shadow-xl">
+              Desconexión total de la ciudad y conexión profunda con la naturaleza en la ancestral Isla Huapi
+            </p>
+            <Button
+              size="lg"
+              className="bg-green-600 hover:bg-green-700 text-white px-10 py-6 text-xl font-semibold transition-all duration-300 transform hover:scale-110 shadow-2xl animate-in fade-in-0 duration-1000 delay-700"
+              asChild
+            >
+              <a href="https://wa.link/8nh1kp" target="_blank" rel="noopener noreferrer">
+                Reserva tu experiencia
+              </a>
+            </Button>
+            
+            {/* Indicador para hacer clic */}
+            <p className="text-white/70 text-sm mt-8 animate-pulse">
+              Haz clic en cualquier lugar para continuar
+            </p>
+          </div>
+
+          {/* Indicador de progreso */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
+            <div className="h-full bg-green-500 animate-[expand_4s_linear_forwards]" style={{
+              animation: 'expand 4s linear forwards',
+            }} />
           </div>
         </div>
-      </section>
+      )}
 
+      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       {/* Navigation Bar */}
       <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-green-100">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="font-serif font-black text-2xl text-green-700">Antukuyen Nativa</div>
+            <Link href="/" className="font-serif font-black text-xl md:text-2xl text-green-700 hover:text-green-800 transition-colors">
+              Antukuyen Nativa
+            </Link>
+            
+            {/* Desktop Menu */}
             <div className="hidden md:flex space-x-8 items-center">
-              <a href="#sobre-nosotros" className="text-gray-700 hover:text-green-600 transition-colors">
+              <Link href="/sobre-nosotros" className="text-gray-700 hover:text-green-600 transition-colors">
                 Sobre Nosotros
-              </a>
+              </Link>
               <a href="#domos" className="text-gray-700 hover:text-green-600 transition-colors">
                 Domos
               </a>
-              <a href="#experiencias" className="text-gray-700 hover:text-green-600 transition-colors">
+              <Link href="/experiencias" className="text-gray-700 hover:text-green-600 transition-colors">
                 Experiencias
-              </a>
+              </Link>
               <a href="#recorrido-lancha" className="text-gray-700 hover:text-green-600 transition-colors">
                 Recorrido de Lancha
               </a>
-              <a href="#contacto" className="text-gray-700 hover:text-green-600 transition-colors">
+              <Link href="/contacto" className="text-gray-700 hover:text-green-600 transition-colors">
                 Contacto
-              </a>
+              </Link>
             </div>
-            <div className="flex items-center space-x-4">
-              {/* Iconos de Redes Sociales */}
-              <div className="flex items-center space-x-3">
-                <a
-                  href="https://www.facebook.com/domosantukuyen"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-all transform hover:scale-110"
-                  aria-label="Facebook"
+
+            {/* Mobile Menu Button */}
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild className="md:hidden">
+                <button 
+                  className="p-2 text-gray-700 hover:text-green-600 transition-colors"
+                  aria-label="Abrir menú"
                 >
-                  <Facebook className="w-5 h-5 text-white" />
-                </a>
-                <a
-                  href="https://www.instagram.com/cabanas_domo_antukuyen/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 rounded-full flex items-center justify-center hover:from-purple-700 hover:via-pink-700 hover:to-orange-600 transition-all transform hover:scale-110"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="w-5 h-5 text-white" />
-                </a>
-              </div>
-              <Button
-                variant="outline"
-                className="border-green-600 text-green-600 hover:bg-green-600 hover:text-white bg-transparent"
-              >
-                <a href="https://wa.link/8nh1kp" target="_blank" rel="noopener noreferrer">
-                  WhatsApp
-                </a>
-              </Button>
-            </div>
+                  <Menu className="w-6 h-6" />
+                </button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[320px] sm:w-[400px] bg-gradient-to-b from-white to-green-50/30">
+                {/* Header del menú */}
+                <div className="mb-8 pb-6 border-b border-green-100">
+                  <h2 className="font-serif font-black text-2xl text-green-700 mb-2">Antukuyen Nativa</h2>
+                  <p className="text-sm text-gray-600">Turismo ancestral mapuche</p>
+                </div>
+
+                <nav className="flex flex-col space-y-2">
+                  <Link 
+                    href="/sobre-nosotros" 
+                    className="group flex items-center space-x-4 p-4 rounded-xl hover:bg-green-50 transition-all duration-300 transform hover:translate-x-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                      <UsersIcon className="w-5 h-5 text-green-600" />
+                    </div>
+                    <span className="text-base font-medium text-gray-700 group-hover:text-green-700">Sobre Nosotros</span>
+                  </Link>
+
+                  <a 
+                    href="#domos" 
+                    className="group flex items-center space-x-4 p-4 rounded-xl hover:bg-green-50 transition-all duration-300 transform hover:translate-x-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+                      <Home className="w-5 h-5 text-emerald-600" />
+                    </div>
+                    <span className="text-base font-medium text-gray-700 group-hover:text-green-700">Domos</span>
+                  </a>
+
+                  <Link 
+                    href="/experiencias" 
+                    className="group flex items-center space-x-4 p-4 rounded-xl hover:bg-green-50 transition-all duration-300 transform hover:translate-x-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                      <Sparkles className="w-5 h-5 text-green-600" />
+                    </div>
+                    <span className="text-base font-medium text-gray-700 group-hover:text-green-700">Experiencias</span>
+                  </Link>
+
+                  <a 
+                    href="#recorrido-lancha" 
+                    className="group flex items-center space-x-4 p-4 rounded-xl hover:bg-green-50 transition-all duration-300 transform hover:translate-x-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                      <Ship className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <span className="text-base font-medium text-gray-700 group-hover:text-green-700">Recorrido de Lancha</span>
+                  </a>
+
+                  <Link 
+                    href="/contacto" 
+                    className="group flex items-center space-x-4 p-4 rounded-xl hover:bg-green-50 transition-all duration-300 transform hover:translate-x-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                      <Phone className="w-5 h-5 text-green-600" />
+                    </div>
+                    <span className="text-base font-medium text-gray-700 group-hover:text-green-700">Contacto</span>
+                  </Link>
+                </nav>
+                  
+                {/* Redes Sociales en Mobile Menu */}
+                <div className="absolute bottom-8 left-6 right-6">
+                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 shadow-lg">
+                    <p className="text-sm font-semibold text-gray-700 mb-4">Síguenos en redes</p>
+                    <div className="flex justify-center space-x-4">
+                      <a
+                        href="https://wa.link/8nh1kp"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-14 h-14 bg-[#25D366] rounded-2xl flex items-center justify-center hover:bg-[#1fb855] transition-all transform hover:scale-110 shadow-md"
+                        aria-label="WhatsApp"
+                      >
+                        <MessageCircle className="w-7 h-7 text-white" fill="white" />
+                      </a>
+                      <a
+                        href="https://www.instagram.com/cabanas_domo_antukuyen/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-14 h-14 bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 rounded-2xl flex items-center justify-center hover:from-purple-700 hover:via-pink-700 hover:to-orange-600 transition-all transform hover:scale-110 shadow-md"
+                        aria-label="Instagram"
+                      >
+                        <Instagram className="w-7 h-7 text-white" />
+                      </a>
+                      <a
+                        href="https://www.facebook.com/domosantukuyen"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-14 h-14 bg-[#1877F2] rounded-2xl flex items-center justify-center hover:bg-[#0c63d4] transition-all transform hover:scale-110 shadow-md"
+                        aria-label="Facebook"
+                      >
+                        <Facebook className="w-7 h-7 text-white" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </nav>
+      
+      {/* Botón Flotante de Contacto */}
+      <div className="fixed bottom-8 right-8 z-50">
+        {/* Iconos de Redes Sociales - Aparecen con animación */}
+        <div className={`flex flex-col gap-3 mb-3 transition-all duration-500 ${
+          showContactMenu 
+            ? 'opacity-100 translate-y-0 pointer-events-auto' 
+            : 'opacity-0 translate-y-4 pointer-events-none'
+        }`}>
+          {/* WhatsApp */}
+          <a
+            href="https://wa.link/8nh1kp"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center hover:bg-[#1fb855] transition-all transform hover:scale-110 shadow-xl animate-in zoom-in-50 fade-in-0 duration-300"
+            style={{ animationDelay: '100ms' }}
+            aria-label="WhatsApp"
+          >
+            <MessageCircle className="w-7 h-7 text-white" fill="white" />
+          </a>
+          
+          {/* Instagram */}
+          <a
+            href="https://www.instagram.com/cabanas_domo_antukuyen/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-14 h-14 bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 rounded-full flex items-center justify-center hover:from-purple-700 hover:via-pink-700 hover:to-orange-600 transition-all transform hover:scale-110 shadow-xl animate-in zoom-in-50 fade-in-0 duration-300"
+            style={{ animationDelay: '200ms' }}
+            aria-label="Instagram"
+          >
+            <Instagram className="w-7 h-7 text-white" />
+          </a>
+          
+          {/* Facebook */}
+          <a
+            href="https://www.facebook.com/domosantukuyen"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-14 h-14 bg-[#1877F2] rounded-full flex items-center justify-center hover:bg-[#0c63d4] transition-all transform hover:scale-110 shadow-xl animate-in zoom-in-50 fade-in-0 duration-300"
+            style={{ animationDelay: '300ms' }}
+            aria-label="Facebook"
+          >
+            <Facebook className="w-7 h-7 text-white" />
+          </a>
+        </div>
+        
+        {/* Botón Principal de Contacto */}
+        <button
+          onClick={() => setShowContactMenu(!showContactMenu)}
+          className={`w-16 h-16 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 transform hover:scale-110 ${
+            showContactMenu 
+              ? 'bg-red-600 hover:bg-red-700 rotate-45' 
+              : 'bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rotate-0'
+          }`}
+          aria-label={showContactMenu ? 'Cerrar menú de contacto' : 'Abrir menú de contacto'}
+        >
+          {showContactMenu ? (
+            <X className="w-8 h-8 text-white" />
+          ) : (
+            <Share2 className="w-8 h-8 text-white" />
+          )}
+        </button>
+      </div>
 
       {/* Carrusel de Imágenes Principal */}
       <section className="relative py-16 overflow-hidden">
@@ -289,93 +451,6 @@ export default function TurismoAncestralPage() {
         </div>
       </section>
 
-      {/* Sobre Nosotros Section */}
-      <section id="sobre-nosotros" className="py-20 bg-gradient-to-r from-green-50 to-emerald-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            <h2 className="font-serif font-black text-4xl md:text-5xl text-gray-800 mb-6">Nuestra Historia</h2>
-            <div className="max-w-4xl mx-auto">
-              <p className="text-xl text-gray-600 leading-relaxed mb-8">
-                Soy Claudia Antillanca Manque, mapuche Huilliche, mujer emprendedora y visionaria que busca
-                desarrollarse en su tierra aportando a la comunidad con su emprendimiento turístico, generando fuente
-                laboral para mujeres y jóvenes.
-              </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Mi objetivo es entregar un servicio de calidad poniendo en valor mi cultura y mi comunidad.
-              </p>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Leaf,
-                iconBg: "bg-green-100",
-                iconHoverBg: "group-hover:bg-green-200",
-                iconColor: "text-green-600",
-                title: "Cultura Mapuche Huilliche",
-                description:
-                  "Charlas de relatos locales, talleres de mapudungun y teñido de lana para conectar con nuestras tradiciones ancestrales.",
-                badge: "Tradición viva",
-                badgeBg: "bg-emerald-100 text-emerald-700",
-              },
-              {
-                icon: Mountain,
-                iconBg: "bg-emerald-100",
-                iconHoverBg: "group-hover:bg-emerald-200",
-                iconColor: "text-emerald-600",
-                title: "Isla Huapi Ancestral",
-                description:
-                  "Una isla mística con vistas espectaculares a la cordillera y el lago Ranco, donde la naturaleza abraza el alma.",
-                badge: "Paisaje sagrado",
-                badgeBg: "bg-green-100 text-green-700",
-              },
-              {
-                icon: Users,
-                iconBg: "bg-green-100",
-                iconHoverBg: "group-hover:bg-green-200",
-                iconColor: "text-green-600",
-                title: "Comunidad y Trabajo",
-                description:
-                  "Trabajo complementario con emprendedoras artesanas, huerteras y guías locales, fortaleciendo nuestra comunidad.",
-                badge: "Desarrollo local",
-                badgeBg: "bg-emerald-100 text-emerald-700",
-              },
-            ].map((card, index) => {
-              const Icon = card.icon
-              const isVisible = visibleCards.includes(index)
-              return (
-                <div
-                  key={index}
-                  ref={(el) => {
-                    cardRefs.current[index] = el
-                  }}
-                  className={`transition-all duration-700 ${
-                    isVisible
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-10"
-                  }`}
-                >
-                  <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-0 bg-white/80 backdrop-blur-sm h-full">
-                    <CardContent className="p-8">
-                      <div
-                        className={`w-16 h-16 ${card.iconBg} rounded-full flex items-center justify-center mb-6 ${card.iconHoverBg} transition-colors`}
-                      >
-                        <Icon className={`w-8 h-8 ${card.iconColor}`} />
-                      </div>
-                      <h3 className="font-serif font-bold text-2xl text-gray-800 mb-4">{card.title}</h3>
-                      <p className="text-gray-600 leading-relaxed mb-4">{card.description}</p>
-                      <Badge variant="secondary" className={card.badgeBg}>
-                        {card.badge}
-                      </Badge>
-                    </CardContent>
-                  </Card>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
 
       {/* Domos Section */}
       <section id="domos" className="py-20 bg-white">
@@ -464,107 +539,6 @@ export default function TurismoAncestralPage() {
         </div>
       </section>
 
-      {/* Experiencias Section */}
-      <section id="experiencias" className="py-20 bg-gradient-to-b from-emerald-50 to-green-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="font-serif font-black text-4xl md:text-5xl text-gray-800 mb-6">Experiencias Culturales</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Actividades que conectan con la cultura Huilliche y la naturaleza de la Isla Huapi.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                image: "/meditating-mountain-sunrise.png",
-                title: "Taller de Mapudungun",
-                description: "Aprende el idioma ancestral mapuche y conecta con la sabiduría de nuestros antepasados.",
-                badge: "Cultura",
-              },
-              {
-                image: "/ancestral-ceremony-waterfall.png",
-                title: "Teñido de Lana",
-                description: "Técnicas tradicionales de teñido usando plantas nativas de la región.",
-                badge: "Artesanía",
-              },
-              {
-                image: "/nocturnal-fire-ritual.png",
-                title: "Relatos Locales",
-                description: "Charlas sobre la historia y tradiciones de la cultura Huilliche en Isla Huapi.",
-                badge: "Tradición",
-              },
-            ].map((experience, index) => (
-              <Card
-                key={index}
-                className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-0 bg-white/90 backdrop-blur-sm overflow-hidden"
-              >
-                <div
-                  className="relative h-64 overflow-hidden cursor-pointer"
-                  onClick={() => setSelectedImage({ src: experience.image, alt: experience.title })}
-                >
-                  <img
-                    src={experience.image || "/placeholder.svg"}
-                    alt={`${experience.title} - ${experience.description} en Antukuyen Nativa, Isla Huapi`}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="bg-white/90 rounded-full p-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-gray-800"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <Badge className="bg-green-600 text-white mb-2">{experience.badge}</Badge>
-                  </div>
-                </div>
-                <CardContent className="p-6">
-                  <h3 className="font-serif font-bold text-xl text-gray-800 mb-3">{experience.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{experience.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <div className="mt-16 text-center">
-            <h3 className="font-serif font-bold text-2xl text-gray-800 mb-8">Actividades Adicionales</h3>
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <div className="flex items-center space-x-4 p-6 bg-white/80 rounded-xl">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <Mountain className="w-6 h-6 text-green-600" />
-                </div>
-                <div className="text-left">
-                  <h4 className="font-semibold text-gray-800">Paseos en Bote</h4>
-                  <p className="text-gray-600">Explora el lago Ranco y sus alrededores</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-4 p-6 bg-white/80 rounded-xl">
-                <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center">
-                  <Users className="w-6 h-6 text-emerald-600" />
-                </div>
-                <div className="text-left">
-                  <h4 className="font-semibold text-gray-800">Paseos en Carreta</h4>
-                  <p className="text-gray-600">Recorridos tradicionales por la isla</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Recorrido de Lancha Section */}
       <section id="recorrido-lancha" className="py-20 bg-gradient-to-b from-blue-50 to-cyan-50">
@@ -702,71 +676,6 @@ export default function TurismoAncestralPage() {
         </div>
       </section>
 
-      {/* Contacto Section */}
-      <section id="contacto" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="font-serif font-black text-4xl md:text-5xl text-gray-800 mb-6">Contacto</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Claudia Antillanca Manque - Pueblo Mapuche Huilliche, Isla Huapi, Futrono, Chile
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <Card className="p-8 hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Phone className="w-8 h-8 text-green-600" />
-              </div>
-              <h3 className="font-semibold text-lg mb-2">WhatsApp</h3>
-              <p className="text-gray-600">+56 9 7454 3737</p>
-              <Button className="mt-4 bg-green-600 hover:bg-green-700" asChild>
-                <a href="https://wa.link/8nh1kp" target="_blank" rel="noopener noreferrer">
-                  Contactar
-                </a>
-              </Button>
-            </Card>
-
-            <Card className="p-8 hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="w-8 h-8 text-emerald-600" />
-              </div>
-              <h3 className="font-semibold text-lg mb-2">Email</h3>
-              <p className="text-gray-600">c.antillancam@gmail.com</p>
-            </Card>
-
-            <Card className="p-8 hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-8 h-8 text-green-600" />
-              </div>
-              <h3 className="font-semibold text-lg mb-2">Ubicación</h3>
-              <p className="text-gray-600">Isla Huapi S/n°, Futrono, Chile</p>
-            </Card>
-          </div>
-
-          <div className="text-center mt-12">
-            <h3 className="font-semibold text-lg mb-6">Síguenos en Redes Sociales</h3>
-            <div className="flex justify-center space-x-6">
-              <a
-                href="https://www.facebook.com/domosantukuyen"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center hover:bg-blue-200 transition-colors"
-              >
-                <Facebook className="w-6 h-6 text-blue-600" />
-              </a>
-              <a
-                href="https://www.instagram.com/cabanas_domo_antukuyen/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center hover:bg-pink-200 transition-colors"
-              >
-                <Instagram className="w-6 h-6 text-pink-600" />
-              </a>
-
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Call to Action Final */}
       <section className="py-20 bg-gradient-to-r from-green-600 to-emerald-600 text-white">
@@ -816,22 +725,22 @@ export default function TurismoAncestralPage() {
               </p>
             </div>
             <div>
-              <h4 className="font-semibold text-lg mb-4">Experiencias</h4>
+              <h4 className="font-semibold text-lg mb-4">Navegación</h4>
               <ul className="space-y-2 text-gray-300">
                 <li>
-                  <a href="#" className="hover:text-green-400 transition-colors">
-                    Taller de Mapudungun
-                  </a>
+                  <Link href="/" className="hover:text-green-400 transition-colors">
+                    Inicio
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-green-400 transition-colors">
-                    Teñido de Lana
-                  </a>
+                  <Link href="/sobre-nosotros" className="hover:text-green-400 transition-colors">
+                    Sobre Nosotros
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-green-400 transition-colors">
-                    Relatos Culturales
-                  </a>
+                  <Link href="/experiencias" className="hover:text-green-400 transition-colors">
+                    Experiencias
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -839,18 +748,13 @@ export default function TurismoAncestralPage() {
               <h4 className="font-semibold text-lg mb-4">Servicios</h4>
               <ul className="space-y-2 text-gray-300">
                 <li>
-                  <a href="#" className="hover:text-green-400 transition-colors">
+                  <a href="#domos" className="hover:text-green-400 transition-colors">
                     Domos Kuyen
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-green-400 transition-colors">
-                    Paseos en Bote
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-green-400 transition-colors">
-                    Actividades Culturales
+                  <a href="#recorrido-lancha" className="hover:text-green-400 transition-colors">
+                    Recorrido de Lancha
                   </a>
                 </li>
               </ul>
