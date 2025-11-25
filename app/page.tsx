@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
@@ -110,12 +111,16 @@ export default function TurismoAncestralPage() {
             sessionStorage.setItem('splashShown', 'true')
           }}
         >
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-in zoom-in-105 fade-in-0 duration-1000"
-            style={{
-              backgroundImage: `url('/bcadf52e-2dfb-482f-9fee-b3b3d9855c4a.avif')`,
-            }}
-          >
+          <div className="absolute inset-0 animate-in zoom-in-105 fade-in-0 duration-1000">
+            <Image
+              src="/bcadf52e-2dfb-482f-9fee-b3b3d9855c4a.avif"
+              alt="Isla Huapi - Antukuyen Nativa"
+              fill
+              priority
+              quality={85}
+              className="object-cover"
+              sizes="100vw"
+            />
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
           </div>
 
@@ -364,12 +369,17 @@ export default function TurismoAncestralPage() {
       <section className="relative py-16 overflow-hidden">
         {/* Imagen de fondo difuminada */}
         <div className="absolute inset-0 z-0">
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-fixed"
-            style={{
-              backgroundImage: `url('/amanecer-montanas-sagradas.png')`,
-            }}
-          />
+          <div className="absolute inset-0">
+            <Image
+              src="/amanecer-montanas-sagradas.png"
+              alt="Amanecer en montañas"
+              fill
+              className="object-cover"
+              quality={60}
+              loading="lazy"
+              sizes="100vw"
+            />
+          </div>
           <div className="absolute inset-0 bg-white/70 backdrop-blur-md" />
         </div>
 
@@ -410,10 +420,14 @@ export default function TurismoAncestralPage() {
                           className="relative h-[500px] md:h-[600px] overflow-hidden cursor-pointer group"
                           onClick={() => setSelectedImage(image)}
                         >
-                          <img
+                          <Image
                             src={image.src}
                             alt={image.alt}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-700"
+                            quality={75}
+                            loading="lazy"
+                            sizes="(max-width: 768px) 100vw, 80vw"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
@@ -505,15 +519,19 @@ export default function TurismoAncestralPage() {
             </div>
 
             <div
-              className="relative cursor-pointer group"
+              className="relative cursor-pointer group h-[400px] md:h-[500px]"
               onClick={() =>
                 setSelectedImage({ src: "/mystical-ancestral-map.png", alt: "Vista de los Domos Antukuyen" })
               }
             >
-              <img
+              <Image
                 src="/domos-arriba.avif"
                 alt="Domos Antukuyen ecológicos en Isla Huapi con vista panorámica al Lago Ranco y la cordillera, turismo ancestral mapuche huilliche"
-                className="w-full h-auto rounded-2xl shadow-2xl group-hover:shadow-3xl transition-all duration-300"
+                fill
+                className="object-cover rounded-2xl shadow-2xl group-hover:shadow-3xl transition-all duration-300"
+                quality={80}
+                loading="lazy"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl group-hover:from-black/30 transition-colors duration-300" />
               <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -585,10 +603,14 @@ export default function TurismoAncestralPage() {
                           className="relative h-96 overflow-hidden group cursor-pointer"
                           onClick={() => setSelectedImage(image)}
                         >
-                          <img
+                          <Image
                             src={image.src}
                             alt={image.alt}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-700"
+                            quality={75}
+                            loading="lazy"
+                            sizes="(max-width: 768px) 100vw, 50vw"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-blue-900/70 via-transparent to-transparent" />
                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
@@ -797,13 +819,17 @@ export default function TurismoAncestralPage() {
             {/* Imagen en grande */}
             {selectedImage && (
               <div className="relative w-full h-full flex flex-col items-center justify-center pointer-events-none">
-                <div className="w-full h-full flex items-center justify-center">
-                  <img
-                    src={selectedImage.src}
-                    alt={selectedImage.alt}
-                    className="max-w-[95vw] max-h-[88vh] w-auto h-auto object-contain rounded-lg shadow-2xl animate-in zoom-in-95 fade-in-0 duration-300 pointer-events-auto cursor-default"
-                    onClick={(e) => e.stopPropagation()}
-                  />
+                <div className="w-full h-full flex items-center justify-center relative">
+                  <div className="relative max-w-[95vw] max-h-[88vh] w-full h-full pointer-events-auto cursor-default" onClick={(e) => e.stopPropagation()}>
+                    <Image
+                      src={selectedImage.src}
+                      alt={selectedImage.alt}
+                      fill
+                      className="object-contain rounded-lg shadow-2xl animate-in zoom-in-95 fade-in-0 duration-300"
+                      quality={90}
+                      sizes="95vw"
+                    />
+                  </div>
                 </div>
                 <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-black/90 backdrop-blur-md rounded-xl px-8 py-4 shadow-2xl max-w-4xl animate-in slide-in-from-bottom-4 duration-500">
                   <p className="text-white text-lg md:text-2xl font-bold text-center drop-shadow-lg">

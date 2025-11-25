@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -252,10 +253,14 @@ export default function ExperienciasPage() {
                   className="relative h-64 overflow-hidden cursor-pointer"
                   onClick={() => setSelectedImage({ src: experience.image, alt: experience.title })}
                 >
-                  <img
+                  <Image
                     src={experience.image || "/placeholder.svg"}
                     alt={`${experience.title} - ${experience.description} en Antukuyen Nativa, Isla Huapi`}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-300"
+                    quality={75}
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
@@ -348,13 +353,17 @@ export default function ExperienciasPage() {
 
             {selectedImage && (
               <div className="relative w-full h-full flex flex-col items-center justify-center pointer-events-none">
-                <div className="w-full h-full flex items-center justify-center">
-                  <img
-                    src={selectedImage.src}
-                    alt={selectedImage.alt}
-                    className="max-w-[95vw] max-h-[88vh] w-auto h-auto object-contain rounded-lg shadow-2xl animate-in zoom-in-95 fade-in-0 duration-300 pointer-events-auto cursor-default"
-                    onClick={(e) => e.stopPropagation()}
-                  />
+                <div className="w-full h-full flex items-center justify-center relative">
+                  <div className="relative max-w-[95vw] max-h-[88vh] w-full h-full pointer-events-auto cursor-default" onClick={(e) => e.stopPropagation()}>
+                    <Image
+                      src={selectedImage.src}
+                      alt={selectedImage.alt}
+                      fill
+                      className="object-contain rounded-lg shadow-2xl animate-in zoom-in-95 fade-in-0 duration-300"
+                      quality={90}
+                      sizes="95vw"
+                    />
+                  </div>
                 </div>
                 <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-black/90 backdrop-blur-md rounded-xl px-8 py-4 shadow-2xl max-w-4xl animate-in slide-in-from-bottom-4 duration-500">
                   <p className="text-white text-lg md:text-2xl font-bold text-center drop-shadow-lg">

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -244,12 +245,17 @@ export default function SobreNosotrosPage() {
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-fixed"
-            style={{
-              backgroundImage: `url('/amanecer-montanas-sagradas.png')`,
-            }}
-          />
+          <div className="absolute inset-0">
+            <Image
+              src="/amanecer-montanas-sagradas.png"
+              alt="Amanecer en montañas sagradas"
+              fill
+              className="object-cover"
+              quality={60}
+              loading="lazy"
+              sizes="100vw"
+            />
+          </div>
           <div className="absolute inset-0 bg-white/80 backdrop-blur-sm" />
         </div>
 
