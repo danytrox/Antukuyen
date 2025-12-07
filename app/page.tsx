@@ -71,30 +71,13 @@ export default function TurismoAncestralPage() {
   // Estados para lightbox y animaciones
   const [selectedImage, setSelectedImage] = useState<{ src: string; alt: string } | null>(null)
   
-  // Estado para el splash screen
-  const [showSplash, setShowSplash] = useState(false)
-  
   // Estado para el menú de contacto flotante
   const [showContactMenu, setShowContactMenu] = useState(false)
   
   // Estado para el menú hamburguesa móvil
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  // Efecto para controlar el splash (solo se muestra una vez por sesión)
-  useEffect(() => {
-    const splashShown = sessionStorage.getItem('splashShown')
-    
-    if (!splashShown) {
-      setShowSplash(true)
-      
-      const timer = setTimeout(() => {
-        setShowSplash(false)
-        sessionStorage.setItem('splashShown', 'true')
-      }, 4000)
-
-      return () => clearTimeout(timer)
-    }
-  }, [])
+  // (La lógica del splash se maneja en el layout para mostrarse inmediatamente antes de la hidratación)
   return (
     <>
       <script
@@ -102,62 +85,7 @@ export default function TurismoAncestralPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       
-      {/* Splash Screen */}
-      {showSplash && (
-        <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-black cursor-pointer"
-          onClick={() => {
-            setShowSplash(false)
-            sessionStorage.setItem('splashShown', 'true')
-          }}
-        >
-          <div className="absolute inset-0 animate-in zoom-in-105 fade-in-0 duration-1000">
-            <Image
-              src="/bcadf52e-2dfb-482f-9fee-b3b3d9855c4a.avif"
-              alt="Isla Huapi - Antukuyen Nativa"
-              fill
-              priority
-              quality={85}
-              className="object-cover"
-              sizes="100vw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
-          </div>
-
-          <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6 animate-in slide-in-from-bottom-8 fade-in-0 duration-1000 delay-300">
-            <h1 className="font-serif font-black text-6xl md:text-8xl mb-8 leading-tight drop-shadow-2xl">
-              Antukuyen Nativa
-            </h1>
-            <p className="text-2xl md:text-3xl mb-6 font-light leading-relaxed drop-shadow-xl">
-              Sol y Luna en idioma mapuzungun
-            </p>
-            <p className="text-xl md:text-2xl mb-12 font-light leading-relaxed drop-shadow-xl">
-              Desconexión total de la ciudad y conexión profunda con la naturaleza en la ancestral Isla Huapi
-            </p>
-            <Button
-              size="lg"
-              className="bg-green-600 hover:bg-green-700 text-white px-10 py-6 text-xl font-semibold transition-all duration-300 transform hover:scale-110 shadow-2xl animate-in fade-in-0 duration-1000 delay-700"
-              asChild
-            >
-              <a href="https://wa.link/8nh1kp" target="_blank" rel="noopener noreferrer">
-                Reserva tu experiencia
-              </a>
-            </Button>
-            
-            {/* Indicador para hacer clic */}
-            <p className="text-white/70 text-sm mt-8 animate-pulse">
-              Haz clic en cualquier lugar para continuar
-            </p>
-          </div>
-
-          {/* Indicador de progreso */}
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
-            <div className="h-full bg-green-500 animate-[expand_4s_linear_forwards]" style={{
-              animation: 'expand 4s linear forwards',
-            }} />
-          </div>
-        </div>
-      )}
+      {/* Splash handled in layout for immediate display before hydration */}
 
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       {/* Navigation Bar */}
