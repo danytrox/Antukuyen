@@ -247,8 +247,8 @@ export default function SobreNosotrosPage() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0">
             <Image
-              src="/amanecer-montanas-sagradas.png"
-              alt="Amanecer en montañas sagradas"
+              src="/DJI_0900.jpg"
+              alt="Paisaje natural de la Isla Huapi"
               fill
               className="object-cover"
               quality={60}

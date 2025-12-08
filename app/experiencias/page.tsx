@@ -227,19 +227,19 @@ export default function ExperienciasPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                image: "/meditating-mountain-sunrise.png",
+                image: "/DSC01293.jpg",
                 title: "Taller de Mapudungun",
                 description: "Aprende el idioma ancestral mapuche y conecta con la sabiduría de nuestros antepasados.",
                 badge: "Cultura",
               },
               {
-                image: "/ancestral-ceremony-waterfall.png",
+                image: "/DSC01442.jpg",
                 title: "Teñido de Lana",
                 description: "Técnicas tradicionales de teñido usando plantas nativas de la región.",
                 badge: "Artesanía",
               },
               {
-                image: "/nocturnal-fire-ritual.png",
+                image: "/IMG_1632.jpg",
                 title: "Relatos Locales",
                 description: "Charlas sobre la historia y tradiciones de la cultura Huilliche en Isla Huapi.",
                 badge: "Tradición",

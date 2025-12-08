@@ -77,15 +77,12 @@ export default function TurismoAncestralPage() {
   // Estado para el menú hamburguesa móvil
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  // (La lógica del splash se maneja en el layout para mostrarse inmediatamente antes de la hidratación)
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      
-      {/* Splash handled in layout for immediate display before hydration */}
 
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       {/* Navigation Bar */}
@@ -299,8 +296,8 @@ export default function TurismoAncestralPage() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0">
             <Image
-              src="/amanecer-montanas-sagradas.png"
-              alt="Amanecer en montañas"
+              src="/DJI_0901.jpg"
+              alt="Vista panorámica del Lago Ranco y la cordillera"
               fill
               className="object-cover"
               quality={60}
@@ -334,11 +331,13 @@ export default function TurismoAncestralPage() {
           >
             <CarouselContent>
               {[
-                { src: "/amanecer-montanas-sagradas.png", alt: "Amanecer en las montañas sagradas" },
-                { src: "/ancestral-ceremony-waterfall.png", alt: "Ceremonia ancestral" },
-                { src: "/meditating-mountain-sunrise.png", alt: "Meditación al amanecer" },
-                { src: "/mystical-ancestral-map.png", alt: "Vista de la isla" },
-                { src: "/nocturnal-fire-ritual.png", alt: "Ritual nocturno" },
+                { src: "/DJI_0898.jpg", alt: "Vista aérea de Isla Huapi y el Lago Ranco" },
+                { src: "/DJI_0900.jpg", alt: "Paisaje natural de la Isla Huapi desde las alturas" },
+                { src: "/DJI_0901.jpg", alt: "Vista panorámica del Lago Ranco y la cordillera" },
+                { src: "/DSC01293.jpg", alt: "Experiencia en Antukuyen Nativa" },
+                { src: "/DSC01442.jpg", alt: "Naturaleza y cultura en Isla Huapi" },
+                { src: "/IMG_1632.jpg", alt: "Domos y entorno natural de Antukuyen" },
+                { src: "/IMG_1711.jpg", alt: "Vista de los domos ecológicos en Isla Huapi" },
               ].map((image, index) => (
                 <CarouselItem key={index}>
                   <div className="p-2">
@@ -387,8 +386,8 @@ export default function TurismoAncestralPage() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="left-4 bg-white/90 hover:bg-white border-green-600 text-green-600 w-12 h-12" />
-            <CarouselNext className="right-4 bg-white/90 hover:bg-white border-green-600 text-green-600 w-12 h-12" />
+            <CarouselPrevious className="left-4 bg-transparent hover:bg-white/20 border-transparent hover:border-green-600 text-white hover:text-green-600 w-12 h-12 backdrop-blur-sm" />
+            <CarouselNext className="right-4 bg-transparent hover:bg-white/20 border-transparent hover:border-green-600 text-white hover:text-green-600 w-12 h-12 backdrop-blur-sm" />
           </Carousel>
         </div>
       </section>
@@ -449,7 +448,7 @@ export default function TurismoAncestralPage() {
             <div
               className="relative cursor-pointer group h-[400px] md:h-[500px]"
               onClick={() =>
-                setSelectedImage({ src: "/mystical-ancestral-map.png", alt: "Vista de los Domos Antukuyen" })
+                setSelectedImage({ src: "/domos-arriba.avif", alt: "Vista de los Domos Antukuyen" })
               }
             >
               <Image
@@ -517,11 +516,11 @@ export default function TurismoAncestralPage() {
           >
             <CarouselContent>
               {[
-                { src: "/amanecer-montanas-sagradas.png", alt: "Vista panorámica del lago al amanecer" },
-                { src: "/mystical-ancestral-map.png", alt: "Lancha navegando por el lago" },
-                { src: "/meditating-mountain-sunrise.png", alt: "Cordillera desde el lago" },
-                { src: "/ancestral-ceremony-waterfall.png", alt: "Orillas naturales de la isla" },
-                { src: "/nocturnal-fire-ritual.png", alt: "Atardecer en el lago Ranco" },
+                { src: "/DJI_0898.jpg", alt: "Vista aérea del Lago Ranco durante el recorrido en lancha" },
+                { src: "/DJI_0900.jpg", alt: "Paisaje del lago desde la lancha" },
+                { src: "/DJI_0901.jpg", alt: "Vista panorámica de la cordillera desde el lago" },
+                { src: "/DSC01293.jpg", alt: "Navegando por las aguas cristalinas del Lago Ranco" },
+                { src: "/DSC01442.jpg", alt: "Orillas naturales de Isla Huapi durante el recorrido" },
               ].map((image, index) => (
                 <CarouselItem key={index} className="md:basis-1/2">
                   <div className="p-3">
@@ -570,8 +569,8 @@ export default function TurismoAncestralPage() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="left-2 bg-white/90 hover:bg-white border-blue-600 text-blue-600" />
-            <CarouselNext className="right-2 bg-white/90 hover:bg-white border-blue-600 text-blue-600" />
+            <CarouselPrevious className="left-2 bg-transparent hover:bg-white/20 border-transparent hover:border-blue-600 text-white hover:text-blue-600 backdrop-blur-sm" />
+            <CarouselNext className="right-2 bg-transparent hover:bg-white/20 border-transparent hover:border-blue-600 text-white hover:text-blue-600 backdrop-blur-sm" />
           </Carousel>
 
           {/* Información del Recorrido */}
